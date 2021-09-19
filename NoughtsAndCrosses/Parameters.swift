@@ -11,3 +11,8 @@ enum Symbol {
     case Cross
     case Nought
 }
+
+enum GameType {
+    case pvp
+    case pve
+}

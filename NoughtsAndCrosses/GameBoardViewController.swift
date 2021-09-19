@@ -10,8 +10,10 @@ import UIKit
 class GameBoardViewController: UIViewController {
         
     @IBOutlet weak var turnLabel: UILabel!
-    @IBOutlet weak var aISymbol: UILabel!
-    @IBOutlet weak var playerSymbol: UILabel!
+    @IBOutlet weak var playerOne: UILabel!
+    @IBOutlet weak var playerTwo: UILabel!
+    @IBOutlet weak var playerOneScore: UILabel!
+    @IBOutlet weak var playerTwoScore: UILabel!
     
     @IBOutlet weak var a1: UIButton!
     @IBOutlet weak var a2: UIButton!
@@ -23,6 +25,8 @@ class GameBoardViewController: UIViewController {
     @IBOutlet weak var c2: UIButton!
     @IBOutlet weak var c3: UIButton!
     @IBOutlet weak var resetButton: UIButton!
+    
+    var gameType: GameType?
     
     private var firtsTurn = Symbol.Cross
     private var currentTurn = Symbol.Cross
@@ -36,8 +40,13 @@ class GameBoardViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
- 
+        
+        setupView()
         initBoard()
+    }
+    
+    @IBAction func exitButtomTapped() {
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func resetButtonTapped() {
@@ -48,7 +57,28 @@ class GameBoardViewController: UIViewController {
     }
     
     @IBAction func boardTapAction(_ sender: UIButton) {
-        addToBoard(sender)
+        gamePlay(sender)
+    }
+    
+    private func setupView() {
+        if gameType == .pvp {
+            playerOne.text = "👷🏼‍♂️: "
+            playerTwo.text = "👨🏻‍🚒: "
+        } else if gameType == .pve {
+            playerOne.text = "🤖: "
+            playerTwo.text = "👨🏻‍🌾: "
+        }
+
+    }
+    
+    private func gamePlay(_ sender: UIButton) {
+        switch gameType {
+        case .pve:
+            addToBoard(sender)
+            aIPlay()
+        default:
+            addToBoard(sender)
+        }
         
         if checkForVictory(cross) {
             crossesScore += 1
@@ -64,6 +94,7 @@ class GameBoardViewController: UIViewController {
             resultAlert(title: "Draw")
         }
     }
+    
     
     private func initBoard() {
         board.append(a1)
@@ -125,8 +156,8 @@ class GameBoardViewController: UIViewController {
     }
     
     private func updateScore() {
-        aISymbol.text = String("🤖: \(noughtsScore)")
-        playerSymbol.text = String("👨🏻‍💻: \(crossesScore)")
+        playerOneScore.text = "\(noughtsScore)"
+        playerTwoScore.text = "\(crossesScore)"
     }
 
     private func resultAlert(title: String) {
@@ -172,6 +203,19 @@ class GameBoardViewController: UIViewController {
             print("TestTwo")
         }))
         self.present(alertController, animated: true)
+    }
+    
+    private func aIPlay() {
+        var availableSpaces = [UIButton]()
+        for space in board {
+            if space.title(for: .normal) == nil {
+                availableSpaces.append(space)
+            }
+        }
+        if availableSpaces.count >= 1 {
+            let randomChoice = Int.random(in: 0..<availableSpaces.count)
+            addToBoard(availableSpaces[randomChoice])
+        }
     }
 }
 
