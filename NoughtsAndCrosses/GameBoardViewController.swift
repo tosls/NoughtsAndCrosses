@@ -8,8 +8,9 @@
 import UIKit
 
 class GameBoardViewController: UIViewController {
-        
+
     @IBOutlet weak var turnLabel: UILabel!
+    @IBOutlet weak var playerTurnLabel: UILabel!
     @IBOutlet weak var playerOne: UILabel!
     @IBOutlet weak var playerTwo: UILabel!
     @IBOutlet weak var playerOneScore: UILabel!
@@ -31,12 +32,15 @@ class GameBoardViewController: UIViewController {
     private var firtsTurn = Symbol.Cross
     private var currentTurn = Symbol.Cross
     
-    private var nought = "O"
-    private var cross = "X"
+    private var cross = "❌"
+    private var nought = "⭕️"
     private var board = [UIButton]()
     
     private var noughtsScore = 0
     private var crossesScore = 0
+    
+    private var playerOneImage = ""
+    private var playerTwoImage = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +48,8 @@ class GameBoardViewController: UIViewController {
         setupView()
         initBoard()
     }
+    
+    //MARK: Setup View
     
     @IBAction func exitButtomTapped() {
         dismiss(animated: true, completion: nil)
@@ -61,40 +67,22 @@ class GameBoardViewController: UIViewController {
     }
     
     private func setupView() {
-        if gameType == .pvp {
-            playerOne.text = "👷🏼‍♂️: "
-            playerTwo.text = "👨🏻‍🚒: "
-        } else if gameType == .pve {
-            playerOne.text = "🤖: "
-            playerTwo.text = "👨🏻‍🌾: "
-        }
-
-    }
-    
-    private func gamePlay(_ sender: UIButton) {
-        switch gameType {
-        case .pve:
-            addToBoard(sender)
-            aIPlay()
-        default:
-            addToBoard(sender)
-        }
+        playerOneImage = Players.playerOne.rawValue
+        playerTwoImage = Players.playerTwo.rawValue
+        playerTurnLabel.text = "\(playerOneImage)"
+        turnLabel.text = "\(cross)"
         
-        if checkForVictory(cross) {
-            crossesScore += 1
-            resultAlert(title: "Crosses Win!")
-            updateScore()
-        }
-        if checkForVictory(nought) {
-            noughtsScore += 1
-            resultAlert(title: "Noughts Win!")
-            updateScore()
-        }
-        if fullBoard() {
-            resultAlert(title: "Draw")
+        if gameType == .pvp {
+            playerOne.text = "\(playerOneImage): "
+            playerTwo.text = "\(playerTwoImage): "
+        } else if gameType == .pve {
+            playerTwoImage = Players.aiPlayer.rawValue
+            playerOne.text = "\(Players.playerOne.rawValue): "
+            playerTwo.text = "\(playerTwoImage): "
         }
     }
     
+    //MARK: Setup gameBoard
     
     private func initBoard() {
         board.append(a1)
@@ -108,15 +96,65 @@ class GameBoardViewController: UIViewController {
         board.append(c3)
     }
     
+    private func updateScore() {
+        playerOneScore.text = "\(crossesScore)"
+        playerTwoScore.text = "\(noughtsScore)"
+    }
+    
+    private func resetBoard() {
+        for button in board {
+            button.setTitle(nil, for: .normal)
+            button.isEnabled = true
+        }
+        currentTurn = firtsTurn
+    }
+    
+    private func fullBoard() -> Bool {
+        for button in board {
+            if button.title(for: .normal) == nil {
+                return false
+            }
+        }
+        return true
+    }
+    
+    // MARK: -Gameplay
+    
+    private func gamePlay(_ sender: UIButton) {
+        switch gameType {
+        case .pve:
+            addToBoard(sender)
+            aIPlay()
+        default:
+            addToBoard(sender)
+        }
+        
+        if checkForVictory(cross) {
+            crossesScore += 1
+            resultAlert(title: "\(cross) Win!")
+            updateScore()
+        }
+        if checkForVictory(nought) {
+            noughtsScore += 1
+            resultAlert(title: "\(nought) Win!")
+            updateScore()
+        }
+        if fullBoard() {
+            resultAlert(title: "Draw")
+        }
+    }
+    
     private func addToBoard(_ sender: UIButton) {
         if sender.title(for: .normal) == nil {
             if currentTurn == Symbol.Nought {
                 sender.setTitle(nought, for: .normal)
                 currentTurn = .Cross
                 turnLabel.text = cross
+                playerTurnLabel.text = playerOneImage
             } else if currentTurn == Symbol.Cross {
                 sender.setTitle(cross, for: .normal)
                 currentTurn = .Nought
+                playerTurnLabel.text = playerTwoImage
                 turnLabel.text = nought
             }
             sender.isEnabled = false
@@ -155,56 +193,6 @@ class GameBoardViewController: UIViewController {
         return button.title(for: .normal) == symbol
     }
     
-    private func updateScore() {
-        playerOneScore.text = "\(noughtsScore)"
-        playerTwoScore.text = "\(crossesScore)"
-    }
-
-    private func resultAlert(title: String) {
-        let alertMessage = "\nNoughts: " + String(noughtsScore) + "\n\nCrosses: " + String(crossesScore)
-        let alertController = UIAlertController(title: title, message: alertMessage, preferredStyle: .actionSheet)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: {_ in
-            self.resetBoard()
-        }))
-        self.present(alertController, animated: true)
-    }
-    
-    private func fullBoard() -> Bool {
-        for button in board {
-            if button.title(for: .normal) == nil {
-                return false
-            }
-        }
-        return true
-    }
-    
-    private func resetBoard() {
-        for button in board {
-            button.setTitle(nil, for: .normal)
-            button.isEnabled = true
-        }
-        if firtsTurn == .Nought {
-            firtsTurn = .Cross
-            turnLabel.text = cross
-        } else if firtsTurn == .Cross {
-            firtsTurn = .Nought
-            turnLabel.text = nought
-        }
-        currentTurn = firtsTurn
-    }
-    
-    private func selectSymbol() {
-        let alertMessage = "X or O"
-        let alertController = UIAlertController(title: "Select Symbol", message: alertMessage, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "X", style: .default, handler: { _ in
-            print("TestOne")
-        }))
-        alertController.addAction(UIAlertAction(title: "O", style: .default, handler: { _ in
-            print("TestTwo")
-        }))
-        self.present(alertController, animated: true)
-    }
-    
     private func aIPlay() {
         var availableSpaces = [UIButton]()
         for space in board {
@@ -216,6 +204,17 @@ class GameBoardViewController: UIViewController {
             let randomChoice = Int.random(in: 0..<availableSpaces.count)
             addToBoard(availableSpaces[randomChoice])
         }
+    }
+    
+    //MARK: Alert
+    
+    private func resultAlert(title: String) {
+        let alertMessage = "\nNoughts: " + String(noughtsScore) + "\n\nCrosses: " + String(crossesScore)
+        let alertController = UIAlertController(title: title, message: alertMessage, preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: {_ in
+            self.resetBoard()
+        }))
+        self.present(alertController, animated: true)
     }
 }
 

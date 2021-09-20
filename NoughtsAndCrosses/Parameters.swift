@@ -16,3 +16,9 @@ enum GameType {
     case pvp
     case pve
 }
+
+enum Players: String {
+    case playerOne = "👨🏻‍🚒"
+    case playerTwo = "👷🏼‍♂️"
+    case aiPlayer = "🤖"
+}
