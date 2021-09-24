@@ -25,12 +25,13 @@
                             </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="lz0-Ok-KPk">
                                 <rect key="frame" x="163.5" y="811" width="87" height="32"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" systemColor="systemRedColor"/>
                                 <segments>
                                     <segment title="PvP"/>
                                     <segment title="PvE"/>
                                 </segments>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="selectedSegmentTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </segmentedControl>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Settings:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gdM-a0-Wq8">
                                 <rect key="frame" x="174" y="770" width="66" height="21"/>
@@ -283,7 +284,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="39" translatesAutoresizingMaskIntoConstraints="NO" id="UzS-al-dU0">
                                 <rect key="frame" x="10" y="133" width="129" height="48"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🏆" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JDe-6k-GWB">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🥇" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JDe-6k-GWB">
                                         <rect key="frame" x="0.0" y="0.0" width="45" height="48"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                         <nil key="textColor"/>
@@ -297,12 +298,19 @@
                                     </label>
                                 </subviews>
                             </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🏆" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zQI-7R-bSU">
+                                <rect key="frame" x="184.5" y="726" width="45" height="48"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="fna-kc-AAv" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="4mx-Fd-kr6"/>
                             <constraint firstItem="aTb-As-rkq" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.9" id="5Jc-KW-OFO"/>
+                            <constraint firstItem="9a9-A2-6l4" firstAttribute="top" secondItem="zQI-7R-bSU" secondAttribute="bottom" constant="10" id="622-bv-BZU"/>
                             <constraint firstItem="aTb-As-rkq" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Am2-MQ-UQ7"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="fqf-Rs-zck" secondAttribute="trailing" constant="10" id="DQj-u9-CFI"/>
                             <constraint firstItem="n3f-Av-6DI" firstAttribute="top" secondItem="fna-kc-AAv" secondAttribute="bottom" constant="20" id="G13-LL-I5k"/>
@@ -318,6 +326,7 @@
                             <constraint firstItem="UzS-al-dU0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="fkx-YO-RKB"/>
                             <constraint firstItem="aTb-As-rkq" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="gM2-3j-XMa"/>
                             <constraint firstItem="cRm-hR-kKO" firstAttribute="top" secondItem="n3f-Av-6DI" secondAttribute="bottom" constant="10" id="hfM-4l-MkW"/>
+                            <constraint firstItem="zQI-7R-bSU" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="pVT-4w-SdU"/>
                             <constraint firstItem="n3f-Av-6DI" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="te5-Qn-v3d"/>
                         </constraints>
                     </view>
@@ -334,6 +343,7 @@
                         <outlet property="c2" destination="aUA-Sh-mgT" id="SZC-UU-kQj"/>
                         <outlet property="c3" destination="zrc-Um-I43" id="uKj-ix-fgv"/>
                         <outlet property="cupLabel" destination="JDe-6k-GWB" id="lPk-tF-Pad"/>
+                        <outlet property="finalAchievementLabel" destination="zQI-7R-bSU" id="vg4-SX-MDL"/>
                         <outlet property="foodLabel" destination="arG-VA-1Dd" id="j4T-5U-55G"/>
                         <outlet property="medaleLabel" destination="WML-ug-MYm" id="1EN-Wg-u0E"/>
                         <outlet property="playerOne" destination="4U7-6Y-4e2" id="AHO-Eu-GiB"/>

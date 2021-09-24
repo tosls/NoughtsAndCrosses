@@ -20,6 +20,7 @@ class GameBoardViewController: UIViewController {
     @IBOutlet weak var foodLabel: UILabel!
     @IBOutlet weak var aiLabel: UILabel!
     @IBOutlet weak var medaleLabel: UILabel!
+    @IBOutlet weak var finalAchievementLabel: UILabel!
     
     @IBOutlet weak var a1: UIButton!
     @IBOutlet weak var a2: UIButton!
@@ -48,7 +49,7 @@ class GameBoardViewController: UIViewController {
     var achievementStatus = [Achievements.aiWin: false,
                              Achievements.addiction: false,
                              Achievements.luck: false,
-                             Achievements.champion: false]
+                             Achievements.boss: false]
     
     private var playerOneImage = ""
     private var playerTwoImage = ""
@@ -96,6 +97,7 @@ class GameBoardViewController: UIViewController {
         medaleLabel.isHidden = true
         aiLabel.isHidden = true
         foodLabel.isHidden = true
+        finalAchievementLabel.isHidden = true
     }
     
     //MARK: Setup gameBoard
@@ -226,7 +228,7 @@ class GameBoardViewController: UIViewController {
         }
     }
     
-    //MARK: Alert
+    //MARK: Alertocntrollers
     
     private func resultAlert(title: String) {
         let alertMessage = "\nNoughts: " + String(noughtsScore) + "\n\nCrosses: " + String(crossesScore)
@@ -238,30 +240,36 @@ class GameBoardViewController: UIViewController {
         self.present(alertController, animated: true)
     }
     
-    //MARK: Achievements
-    
-    private func achievementsCheck() {
-        if crossesScore == 10 && achievementStatus[Achievements.champion] != true {
-            achievementAlert(title: Achievements.champion.rawValue, message: "Выйграть десять раз подряд", label: cupLabel)
-            achievementStatus[Achievements.champion] = true
-        } else if crossesScore == 5 && achievementStatus[Achievements.luck] != true {
-            achievementAlert(title: Achievements.luck.rawValue, message: "Выйграть пять раз подряд", label: medaleLabel)
-            achievementStatus[Achievements.luck] = true
-        } else if noughtsScore == 2 && gameType == GameType.pve && achievementStatus[Achievements.aiWin] != true {
-            achievementAlert(title: Achievements.aiWin.rawValue, message: "А твой телефон умней чем ты думаешь..", label: aiLabel)
-            achievementStatus[Achievements.aiWin] = true
-        } else if gamesCount == 10 && achievementStatus[Achievements.addiction] != true {
-            achievementAlert(title: Achievements.addiction.rawValue, message: "Ты слишком долго играешь, иди поешь", label: foodLabel)
-            achievementStatus[Achievements.addiction] = true
-        }
-    }
-    
     private func achievementAlert(title: String, message: String, label: UILabel) {
-        let achievementAlert = UIAlertController(title: "Получено достижение - \(title)", message: message, preferredStyle: .alert)
+        let achievementAlert = UIAlertController(title: "Получено достижение \(title)", message: message, preferredStyle: .alert)
         achievementAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
             label.isHidden = false
         }))
         self.present(achievementAlert, animated: true)
+    }
+    
+    //MARK: Achievements
+    
+    private func achievementsCheck() {
+        if crossesScore == 10 && gameType == GameType.pve && achievementStatus[Achievements.boss] != true {
+            achievementAlert(title: Achievements.boss.rawValue, message: "Выйграть десять раз подряд", label: cupLabel)
+            achievementStatus[Achievements.boss] = true
+            
+        } else if crossesScore == 5 && gameType == GameType.pve && achievementStatus[Achievements.luck] != true {
+            achievementAlert(title: Achievements.luck.rawValue, message: "Выйграть пять раз подряд", label: medaleLabel)
+            achievementStatus[Achievements.luck] = true
+            
+        } else if noughtsScore == 2 && gameType == GameType.pve && achievementStatus[Achievements.aiWin] != true {
+            achievementAlert(title: Achievements.aiWin.rawValue, message: "А твой телефон умней чем ты думаешь...", label: aiLabel)
+            achievementStatus[Achievements.aiWin] = true
+            
+        } else if gamesCount == 20 && gameType == GameType.pve && achievementStatus[Achievements.addiction] != true {
+            achievementAlert(title: Achievements.addiction.rawValue, message: "Ты слишком долго играешь, иди поешь", label: foodLabel)
+            achievementStatus[Achievements.addiction] = true
+            
+        } else if achievementStatus[Achievements.boss] == true && achievementStatus[Achievements.addiction] == true && achievementStatus[Achievements.aiWin] == true && achievementStatus[Achievements.luck] == true {
+            achievementAlert(title: Achievements.champion.rawValue, message: "Ты получил все достижения", label: finalAchievementLabel)
+        }
     }
 }
 

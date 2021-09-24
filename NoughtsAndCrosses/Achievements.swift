@@ -9,9 +9,10 @@ import Foundation
 
 enum Achievements: String {
     case aiWin = "Rise of the Machines"
-    case champion = "Gamer"
+    case boss = "BOSS"
     case addiction = "Addiction"
     case luck = "Master"
+    case champion = "Champion"
 }
 
 
