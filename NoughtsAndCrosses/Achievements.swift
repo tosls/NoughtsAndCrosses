@@ -11,9 +11,7 @@ enum Achievements: String {
     case aiWin = "Rise of the Machines"
     case champion = "Gamer"
     case addiction = "Addiction"
-    case luck = "Luck"
-    
-    
+    case luck = "Master"
 }
 
 

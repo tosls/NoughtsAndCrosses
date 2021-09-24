@@ -241,8 +241,6 @@ class GameBoardViewController: UIViewController {
     //MARK: Achievements
     
     private func achievementsCheck() {
-        print(achievementStatus)
-        
         if crossesScore == 10 && achievementStatus[Achievements.champion] != true {
             achievementAlert(title: Achievements.champion.rawValue, message: "Выйграть десять раз подряд", label: cupLabel)
             achievementStatus[Achievements.champion] = true
@@ -259,7 +257,6 @@ class GameBoardViewController: UIViewController {
     }
     
     private func achievementAlert(title: String, message: String, label: UILabel) {
-        
         let achievementAlert = UIAlertController(title: "Получено достижение - \(title)", message: message, preferredStyle: .alert)
         achievementAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
             label.isHidden = false
