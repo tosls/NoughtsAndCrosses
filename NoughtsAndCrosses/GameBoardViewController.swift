@@ -16,6 +16,11 @@ class GameBoardViewController: UIViewController {
     @IBOutlet weak var playerOneScore: UILabel!
     @IBOutlet weak var playerTwoScore: UILabel!
     
+    @IBOutlet weak var cupLabel: UILabel!
+    @IBOutlet weak var foodLabel: UILabel!
+    @IBOutlet weak var aiLabel: UILabel!
+    @IBOutlet weak var medaleLabel: UILabel!
+    
     @IBOutlet weak var a1: UIButton!
     @IBOutlet weak var a2: UIButton!
     @IBOutlet weak var a3: UIButton!
@@ -38,6 +43,12 @@ class GameBoardViewController: UIViewController {
     
     private var noughtsScore = 0
     private var crossesScore = 0
+    private var gamesCount = 0
+    
+    var achievementStatus = [Achievements.aiWin: false,
+                             Achievements.addiction: false,
+                             Achievements.luck: false,
+                             Achievements.champion: false]
     
     private var playerOneImage = ""
     private var playerTwoImage = ""
@@ -80,6 +91,11 @@ class GameBoardViewController: UIViewController {
             playerOne.text = "\(Players.playerOne.rawValue): "
             playerTwo.text = "\(playerTwoImage): "
         }
+        
+        cupLabel.isHidden = true
+        medaleLabel.isHidden = true
+        aiLabel.isHidden = true
+        foodLabel.isHidden = true
     }
     
     //MARK: Setup gameBoard
@@ -128,19 +144,23 @@ class GameBoardViewController: UIViewController {
         default:
             addToBoard(sender)
         }
+        achievementsCheck()
         
         if checkForVictory(cross) {
             crossesScore += 1
             resultAlert(title: "\(cross) Win!")
             updateScore()
+            gamesCount += 1
         }
         if checkForVictory(nought) {
             noughtsScore += 1
             resultAlert(title: "\(nought) Win!")
             updateScore()
+            gamesCount += 1
         }
         if fullBoard() {
             resultAlert(title: "Draw")
+            gamesCount += 1
         }
     }
     
@@ -213,8 +233,38 @@ class GameBoardViewController: UIViewController {
         let alertController = UIAlertController(title: title, message: alertMessage, preferredStyle: .actionSheet)
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: {_ in
             self.resetBoard()
+            alertController.dismiss(animated: true, completion: nil)
         }))
         self.present(alertController, animated: true)
+    }
+    
+    //MARK: Achievements
+    
+    private func achievementsCheck() {
+        print(achievementStatus)
+        
+        if crossesScore == 10 && achievementStatus[Achievements.champion] != true {
+            achievementAlert(title: Achievements.champion.rawValue, message: "Выйграть десять раз подряд", label: cupLabel)
+            achievementStatus[Achievements.champion] = true
+        } else if crossesScore == 5 && achievementStatus[Achievements.luck] != true {
+            achievementAlert(title: Achievements.luck.rawValue, message: "Выйграть пять раз подряд", label: medaleLabel)
+            achievementStatus[Achievements.luck] = true
+        } else if noughtsScore == 2 && gameType == GameType.pve && achievementStatus[Achievements.aiWin] != true {
+            achievementAlert(title: Achievements.aiWin.rawValue, message: "А твой телефон умней чем ты думаешь..", label: aiLabel)
+            achievementStatus[Achievements.aiWin] = true
+        } else if gamesCount == 10 && achievementStatus[Achievements.addiction] != true {
+            achievementAlert(title: Achievements.addiction.rawValue, message: "Ты слишком долго играешь, иди поешь", label: foodLabel)
+            achievementStatus[Achievements.addiction] = true
+        }
+    }
+    
+    private func achievementAlert(title: String, message: String, label: UILabel) {
+        
+        let achievementAlert = UIAlertController(title: "Получено достижение - \(title)", message: message, preferredStyle: .alert)
+        achievementAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+            label.isHidden = false
+        }))
+        self.present(achievementAlert, animated: true)
     }
 }
 
